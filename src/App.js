@@ -1,64 +1,73 @@
 import React from 'react';
 import './App.css';
-
+import './mainArea.css';
 
 import AppBar from '@material-ui/core/AppBar';
-import Typography from '@material-ui/core/Typography';
-import { Toolbar } from '@material-ui/core';
+import { Typography, makeStyles, Toolbar } from '@material-ui/core';
+import MainNavigation from './components/MainNavigation';
+import Footer from './components/footer';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 
-import MainNavigation from './MainNavigation/MainNavigation';
-import Posts from './Post/Posts';
-import Footer from './Footer/Footer';
 
+import Home from './components/Home';
+import Cards from './components/Cards';
+import Contact from './components/Contact';
+import Services from './components/Services';
+import Post from './components/Post';
+import ScrollToTop from './components/ScrollToTop';
 
-import { makeStyles } from '@material-ui/styles';
-
+import postdata from './postdata';
 
 
 const useStyles = makeStyles({
   root: {
-    padding:25,
-    background: "#131313",
     flexGrow: 1,
-  },
-  list: {
-    bacground:"green"
+    background: '#131313',
+    color: '#ffffff',
+    
   },
   title: {
     flexGrow: 1,
+    padding: 25,
   }
 });
 
-
-const App = () => {
+const App = ({ match }) => {
   const classes = useStyles();
+
   return (
     <div>
-      <AppBar className={classes.root}>
-        <Toolbar>
-          <Typography variant="h5" className={classes.title}>
-            Material-UI DEMO
-          </Typography>
+      <Router basename='/'>
 
-          <MainNavigation />
+        <AppBar className={classes.root}>
+          <Toolbar>
+            <Typography variant="h2" className={classes.title}>
+              Material UI Demo
+        </Typography>
 
-        </Toolbar>
-      </AppBar>
-     
-      <Posts>
+            <MainNavigation />
+          </Toolbar>
+        </AppBar>
 
+        <Switch>
+          <Route exact path='/' component={Home} />
+          <Route exact path='/cards' component={Cards} />
+          <Route exact path='/services' component={Services} />
+          <Route exact path='/contact' component={Contact} />
 
-      </Posts>
+          <ScrollToTop>
+            <Route exact path={`/cards/:postId`}
+              render={(props) => <Post data={postdata} {...props} />}
+            />
+          </ScrollToTop>
+        </Switch>
 
-      <Footer> 
-      
-        
-      </Footer>
+        <Footer className={classes.root} />
+
+      </Router>
     </div>
   );
 }
-
-
 
 export default App;
